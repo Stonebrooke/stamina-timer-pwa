@@ -23,9 +23,9 @@
   </div>
 
   <!-- 添加/编辑计时器模态框 -->
-  <div id="modal" class="modal hidden">
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-content">
-      <h2>新建计时器</h2>
+      <h2 id="modal-title">新建计时器</h2>
       <form id="timer-form">
         <label>游戏名称 <input type="text" name="name" required placeholder="如：原神"></label>
         <label>图标 <input type="text" name="icon" placeholder="🎮" maxlength="4"></label>

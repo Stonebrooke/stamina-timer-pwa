@@ -60,8 +60,14 @@ describe('validateIcon', () => {
     expect(validateIcon('🎮')).toBe('🎮');
   });
 
-  it('accepts 4-character string', () => {
-    expect(validateIcon('ABCD')).toBe('ABCD');
+  it('rejects 4-character ASCII string as non-emoji', () => {
+    expect(validateIcon('ABCD')).toBe('🎮');
+  });
+
+  it('rejects ASCII letters and digits', () => {
+    expect(validateIcon('abc')).toBe('🎮');
+    expect(validateIcon('123')).toBe('🎮');
+    expect(validateIcon('<scr')).toBe('🎮');
   });
 
   it('returns default for empty string', () => {

@@ -88,6 +88,13 @@ body {
   gap: 16px;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: #888;
+  font-size: 1rem;
+}
+
 .timer-card {
   background-color: var(--card-bg);
   border-radius: 12px;
@@ -115,6 +122,10 @@ body {
   font-size: 1.2rem;
   font-weight: 600;
   flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .btn-edit,
@@ -259,6 +270,46 @@ body {
   gap: 8px;
   justify-content: flex-end;
   margin-top: 8px;
+}
+
+/* Toast 通知 */
+.toast-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+  max-width: 320px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: auto;
+}
+
+.toast.toast-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-error {
+  border-left-color: var(--danger-color);
+}
+
+.toast-success {
+  border-left-color: var(--success-color);
 }
 
 /* Responsive */

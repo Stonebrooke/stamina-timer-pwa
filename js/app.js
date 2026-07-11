@@ -2,7 +2,7 @@
 import { TimerDB } from './db.js';
 import { StaminaCalculator } from './timer.js';
 import { NotificationService } from './notify.js';
-import { escapeHtml, validateColor, validateIcon } from './utils.js';
+import { escapeHtml, validateColor, validateIcon, showToast } from './utils.js';
 
 /**
  * 检测体力是否跨过通知阈值，跨过则弹通知
@@ -86,6 +86,18 @@ class StaminaApp {
     document.getElementById('enable-notifications').addEventListener('click', () => this.enableNotifications());
     document.getElementById('cancel-btn').addEventListener('click', () => this.closeModal());
 
+    // 点击模态框外部遮罩区域关闭
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) this.closeModal();
+    });
+
+    // Escape 键关闭模态框
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !document.getElementById('modal').classList.contains('hidden')) {
+        this.closeModal();
+      }
+    });
+
     // 表单提交处理器
     document.getElementById('timer-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -103,23 +115,23 @@ class StaminaApp {
 
       // 输入校验
       if (!formData.name) {
-        alert('请输入游戏名称');
+        showToast('请输入游戏名称', 'error');
         return;
       }
       if (isNaN(formData.maxStamina) || formData.maxStamina < 1) {
-        alert('体力上限必须为正整数');
+        showToast('体力上限必须为正整数', 'error');
         return;
       }
       if (isNaN(formData.currentStamina) || formData.currentStamina < 0) {
-        alert('当前体力不能为负数');
+        showToast('当前体力不能为负数', 'error');
         return;
       }
       if (formData.currentStamina > formData.maxStamina) {
-        alert('当前体力不能超过体力上限');
+        showToast('当前体力不能超过体力上限', 'error');
         return;
       }
       if (isNaN(formData.recoveryMinutes) || formData.recoveryMinutes < 1) {
-        alert('恢复间隔必须为正整数（分钟）');
+        showToast('恢复间隔必须为正整数（分钟）', 'error');
         return;
       }
 
@@ -133,7 +145,7 @@ class StaminaApp {
         this.closeModal();
       } catch (err) {
         console.error('保存失败:', err);
-        alert('保存失败: ' + err.message);
+        showToast('保存失败: ' + err.message, 'error');
       }
     });
   }
@@ -230,35 +242,39 @@ class StaminaApp {
       await TimerDB.deleteTimer(id);
       this.timers = this.timers.filter(t => t.id !== id);
       this.render();
+      showToast('计时器已删除', 'success');
     } catch (err) {
       console.error('删除失败:', err);
-      alert('删除失败: ' + err.message);
+      showToast('删除失败: ' + err.message, 'error');
     }
   }
 
   async enableNotifications() {
     const result = await NotificationService.requestPermission();
     if (result.granted) {
-      alert('通知已开启！');
+      showToast('通知已开启！', 'success');
       const btn = document.getElementById('enable-notifications');
       btn.textContent = '✅ 通知已开启';
       btn.disabled = true;
     } else {
-      alert(result.reason || '通知开启失败');
+      showToast(result.reason || '通知开启失败', 'error');
     }
   }
 
   // ─── 模态框 ───
 
   showAddModal() {
+    this._triggerElement = document.activeElement;
     const modal = document.getElementById('modal');
     modal.querySelector('h2').textContent = '新建计时器';
     modal.querySelector('form').reset();
     modal.dataset.mode = 'add';
     modal.classList.remove('hidden');
+    modal.querySelector('input[name="name"]').focus();
   }
 
   showEditModal(timer) {
+    this._triggerElement = document.activeElement;
     const modal = document.getElementById('modal');
     const form = modal.querySelector('form');
     modal.querySelector('h2').textContent = '编辑计时器';
@@ -275,10 +291,12 @@ class StaminaApp {
     form.color.value = timer.color || '#4a90d9';
 
     modal.classList.remove('hidden');
+    form.name.focus();
   }
 
   closeModal() {
     document.getElementById('modal').classList.add('hidden');
+    this._triggerElement?.focus();
   }
 
   // ─── 渲染 ───
@@ -286,6 +304,11 @@ class StaminaApp {
   render() {
     const container = document.getElementById('timer-list');
     container.innerHTML = '';
+
+    if (this.timers.length === 0) {
+      container.innerHTML = '<div class="empty-state"><p>还没有计时器，点击「新建计时器」开始追踪吧！</p></div>';
+      return; // 无计时器，无需 updateDisplay
+    }
 
     this.timers.forEach(timer => {
       const card = document.createElement('div');

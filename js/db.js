@@ -35,7 +35,9 @@ export class TimerDB {
     return new Promise((resolve, reject) => {
       const tx = db.transaction('timers', 'readonly');
       const store = tx.objectStore('timers');
-      const request = store.getAll();
+      // 使用 createdAt 索引保证返回顺序按创建时间稳定
+      const index = store.index('createdAt');
+      const request = index.getAll();
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });

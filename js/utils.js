@@ -1,4 +1,4 @@
-// js/utils.js — XSS 防护工具函数
+// js/utils.js — XSS 防护工具函数 + Toast 通知
 
 export function escapeHtml(str) {
   const div = document.createElement('div');
@@ -12,5 +12,40 @@ export function validateColor(color) {
 
 export function validateIcon(icon) {
   if (!icon || icon.length === 0 || icon.length > 4) return '🎮';
+  // 拒绝纯 ASCII 可打印字符（防止 "abc", "123", "<scr" 等非 emoji 输入）
+  if (/^[\x20-\x7e]+$/.test(icon)) return '🎮';
   return icon;
+}
+
+/**
+ * 显示非阻塞 toast 通知
+ * @param {string} message - 消息内容
+ * @param {'info'|'error'|'success'} type - 通知类型
+ * @param {number} duration - 显示时长（毫秒）
+ */
+export function showToast(message, type = 'info', duration = 3000) {
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  // 最多同时显示 3 条，超出移除最早的
+  while (container.children.length >= 3) {
+    container.firstChild.remove();
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  // 入场动画
+  requestAnimationFrame(() => toast.classList.add('toast-visible'));
+
+  setTimeout(() => {
+    toast.classList.remove('toast-visible');
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+  }, duration);
 }
