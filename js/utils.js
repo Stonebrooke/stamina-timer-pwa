@@ -10,13 +10,6 @@ export function validateColor(color) {
   return /^#[0-9a-fA-F]{6}$/.test(color) ? color : '#4a90d9';
 }
 
-export function validateIcon(icon) {
-  if (!icon || icon.length === 0 || icon.length > 4) return '🎮';
-  // 拒绝纯 ASCII 可打印字符（防止 "abc", "123", "<scr" 等非 emoji 输入）
-  if (/^[\x20-\x7e]+$/.test(icon)) return '🎮';
-  return icon;
-}
-
 /**
  * 显示非阻塞 toast 通知
  * @param {string} message - 消息内容

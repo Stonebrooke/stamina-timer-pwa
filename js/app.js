@@ -2,7 +2,7 @@
 import { TimerDB } from './db.js';
 import { StaminaCalculator } from './timer.js';
 import { NotificationService } from './notify.js';
-import { escapeHtml, validateColor, validateIcon, showToast } from './utils.js';
+import { escapeHtml, validateColor, showToast } from './utils.js';
 
 /**
  * 检测体力是否跨过通知阈值，跨过则弹通知
@@ -104,7 +104,6 @@ class StaminaApp {
       const form = e.target;
       const formData = {
         name: form.name.value.trim(),
-        icon: form.icon.value.trim(),
         maxStamina: parseInt(form.maxStamina.value),
         currentStamina: parseInt(form.currentStamina.value),
         recoveryMinutes: parseInt(form.recoveryMinutes.value),
@@ -189,7 +188,6 @@ class StaminaApp {
     const now = Date.now();
     const timer = {
       name: formData.name,
-      icon: validateIcon(formData.icon),
       maxStamina: parseInt(formData.maxStamina),
       currentStamina: parseInt(formData.currentStamina),
       recoveryMinutes: parseInt(formData.recoveryMinutes),
@@ -216,7 +214,6 @@ class StaminaApp {
 
     const changes = {
       name: formData.name,
-      icon: validateIcon(formData.icon),
       maxStamina: parseInt(formData.maxStamina),
       currentStamina: parseInt(formData.currentStamina),
       recoveryMinutes: parseInt(formData.recoveryMinutes),
@@ -282,7 +279,6 @@ class StaminaApp {
     modal.dataset.timerId = timer.id;
 
     form.name.value = timer.name;
-    form.icon.value = timer.icon || '';
     form.maxStamina.value = timer.maxStamina;
     form.currentStamina.value = Math.round(StaminaCalculator.getExactStamina(timer));
     form.recoveryMinutes.value = timer.recoveryMinutes;
@@ -318,7 +314,6 @@ class StaminaApp {
 
       card.innerHTML = `
         <div class="timer-header">
-          <span class="timer-icon">${escapeHtml(timer.icon)}</span>
           <span class="timer-name">${escapeHtml(timer.name)}</span>
           <button class="btn-edit" data-action="edit">⚙️</button>
           <button class="btn-delete" data-action="delete">🗑️</button>

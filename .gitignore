@@ -1,5 +1,29 @@
+# Dependencies
 node_modules/
-dist/
-.DS_Store
-*.log
+
+# Local Node.js runtime (bundled for convenience, not source)
 nodejs/
+
+# Build output
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Trae IDE working files
+.trae/
+.trae-html-share-packages/
+
+# Dogfood testing output (temporary verification artifacts)
+dogfood-output/
+
+# Windows shortcuts
+*.lnk
+
+# Logs
+*.log

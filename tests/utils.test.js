@@ -1,6 +1,6 @@
 // tests/utils.test.js
 import { describe, it, expect } from 'vitest';
-import { escapeHtml, validateColor, validateIcon } from '../js/utils.js';
+import { escapeHtml, validateColor } from '../js/utils.js';
 
 describe('escapeHtml', () => {
   it('escapes HTML special characters', () => {
@@ -52,37 +52,5 @@ describe('validateColor', () => {
 
   it('returns default for empty string', () => {
     expect(validateColor('')).toBe('#4a90d9');
-  });
-});
-
-describe('validateIcon', () => {
-  it('accepts valid emoji', () => {
-    expect(validateIcon('🎮')).toBe('🎮');
-  });
-
-  it('rejects 4-character ASCII string as non-emoji', () => {
-    expect(validateIcon('ABCD')).toBe('🎮');
-  });
-
-  it('rejects ASCII letters and digits', () => {
-    expect(validateIcon('abc')).toBe('🎮');
-    expect(validateIcon('123')).toBe('🎮');
-    expect(validateIcon('<scr')).toBe('🎮');
-  });
-
-  it('returns default for empty string', () => {
-    expect(validateIcon('')).toBe('🎮');
-  });
-
-  it('returns default for null', () => {
-    expect(validateIcon(null)).toBe('🎮');
-  });
-
-  it('returns default for undefined', () => {
-    expect(validateIcon(undefined)).toBe('🎮');
-  });
-
-  it('returns default for string longer than 4 chars', () => {
-    expect(validateIcon('ABCDE')).toBe('🎮');
   });
 });

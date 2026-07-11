@@ -85,7 +85,6 @@ describe('TimerDB', () => {
     it('preserves all caller-provided fields', async () => {
       const saved = await TimerDB.addTimer({
         name: '绝区零',
-        icon: '⚔️',
         maxStamina: 240,
         currentStamina: 100,
         recoveryMinutes: 6,
@@ -96,7 +95,6 @@ describe('TimerDB', () => {
         color: '#ff6b6b'
       });
       expect(saved.name).toBe('绝区零');
-      expect(saved.icon).toBe('⚔️');
       expect(saved.maxStamina).toBe(240);
       expect(saved.currentStamina).toBe(100);
       expect(saved.recoveryMinutes).toBe(6);
