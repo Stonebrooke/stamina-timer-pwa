@@ -19,4 +19,15 @@ export class StaminaCalculator {
   static getCurrentStamina(timer) {
     return Math.floor(this.getExactStamina(timer));
   }
+
+  /**
+   * 计算距离满体力还有多久（毫秒）
+   * 使用精确体力值，确保倒计时每秒平滑递减
+   */
+  static timeToFull(timer) {
+    const exact = this.getExactStamina(timer);
+    const needed = timer.maxStamina - exact;
+    if (needed <= 0) return 0;
+    return needed * timer.recoveryMinutes * 60000;
+  }
 }

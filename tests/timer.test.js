@@ -87,4 +87,41 @@ describe('StaminaCalculator', () => {
       expect(StaminaCalculator.getCurrentStamina(timer)).toBe(130);
     });
   });
+
+  describe('timeToFull', () => {
+    it('returns 0 when already at max stamina', () => {
+      Date.now = () => 1690123456789 + 1000 * 60000;
+      const timer = {
+        currentStamina: 120,
+        maxStamina: 160,
+        recoveryMinutes: 8,
+        startTime: 1690123456789
+      };
+      expect(StaminaCalculator.timeToFull(timer)).toBe(0);
+    });
+
+    it('returns milliseconds needed to reach max from exact stamina', () => {
+      Date.now = () => 1690123456789 + 4 * 60000;
+      const timer = {
+        currentStamina: 120,
+        maxStamina: 160,
+        recoveryMinutes: 8,
+        startTime: 1690123456789
+      };
+      // exact = 120.5, needed = 39.5 points, 39.5 * 8 * 60000 = 18960000
+      expect(StaminaCalculator.timeToFull(timer)).toBe(18960000);
+    });
+
+    it('returns full recovery time when at starting stamina', () => {
+      Date.now = () => 1690123456789;
+      const timer = {
+        currentStamina: 120,
+        maxStamina: 160,
+        recoveryMinutes: 8,
+        startTime: 1690123456789
+      };
+      // 40 points needed * 8 min * 60000 = 19200000
+      expect(StaminaCalculator.timeToFull(timer)).toBe(19200000);
+    });
+  });
 });
