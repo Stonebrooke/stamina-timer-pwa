@@ -1,0 +1,18 @@
+{
+  "name": "stamina-timer-pwa",
+  "version": "1.2.2",
+  "description": "游戏体力恢复计时器 PWA",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "generate-icons": "node scripts/generate-icons.js",
+    "serve": "npx http-server . -p 3000 -c-1"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.0",
+    "fake-indexeddb": "^6.0.0",
+    "jsdom": "^25.0.0",
+    "canvas": "^2.11.2"
+  }
+}
