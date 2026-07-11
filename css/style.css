@@ -20,6 +20,8 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   min-height: 100vh;
+  /* iOS black-translucent 状态栏安全区域适配 */
+  padding-top: env(safe-area-inset-top);
 }
 
 .app-container {
@@ -306,6 +308,46 @@ body {
 
 .toast-success {
   border-left-color: var(--success-color);
+}
+
+/* iOS 安装引导浮层 */
+.install-guide {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  background-color: var(--card-bg);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1500;
+  border-left: 4px solid var(--primary-color);
+}
+
+.install-guide.hidden {
+  display: none;
+}
+
+.install-guide-content h3 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+
+.install-guide-content p {
+  margin-bottom: 12px;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.install-guide-content ol {
+  margin: 0 0 16px 20px;
+  color: #ccc;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.install-guide-content ol li strong {
+  color: var(--text-color);
 }
 
 /* Responsive */

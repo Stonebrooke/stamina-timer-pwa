@@ -79,6 +79,9 @@ class StaminaApp {
         btn.disabled = true;
       }
     }
+
+    // PWA 安装支持
+    this.setupInstallPrompt();
   }
 
   bindEvents() {
@@ -255,6 +258,53 @@ class StaminaApp {
       btn.disabled = true;
     } else {
       showToast(result.reason || '通知开启失败', 'error');
+    }
+  }
+
+  // ─── PWA 安装支持 ───
+
+  setupInstallPrompt() {
+    // 桌面端：捕获 beforeinstallprompt，显示自定义安装按钮
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('install-app');
+      if (btn) btn.style.display = 'inline-block';
+    });
+
+    const installBtn = document.getElementById('install-app');
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installBtn.style.display = 'none';
+      });
+    }
+
+    window.addEventListener('appinstalled', () => {
+      const btn = document.getElementById('install-app');
+      if (btn) btn.style.display = 'none';
+    });
+
+    // iOS：非 standalone 模式 + 本会话未关闭过引导 → 显示安装引导浮层
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                      || window.navigator.standalone === true;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const guideDismissed = sessionStorage.getItem('ios-install-guide-dismissed') === '1';
+    if (isIOS && !isStandalone && !guideDismissed) {
+      const guide = document.getElementById('ios-install-guide');
+      if (guide) guide.classList.remove('hidden');
+    }
+
+    const closeBtn = document.getElementById('close-install-guide');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        document.getElementById('ios-install-guide').classList.add('hidden');
+        sessionStorage.setItem('ios-install-guide-dismissed', '1');
+      });
     }
   }
 
