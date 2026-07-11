@@ -60,4 +60,28 @@ export class StaminaCalculator {
     const nextThreshold = Math.floor(exact / timer.notifyInterval) * timer.notifyInterval + timer.notifyInterval;
     return Math.min(nextThreshold, timer.maxStamina);
   }
+
+  /**
+   * 格式化剩余时间
+   */
+  static formatDuration(ms) {
+    if (ms <= 0) return '已满';
+    const totalMinutes = Math.ceil(ms / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours > 0) return `${hours}小时${minutes}分`;
+    return `${minutes}分钟`;
+  }
+
+  /**
+   * 格式化精确倒计时 HH:MM:SS
+   */
+  static formatCountdown(ms) {
+    if (ms <= 0) return '00:00:00';
+    const totalSeconds = Math.ceil(ms / 1000);
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
 }

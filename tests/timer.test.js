@@ -246,4 +246,59 @@ describe('StaminaCalculator', () => {
       expect(StaminaCalculator.getNextNotifyStamina(timer)).toBe(160);
     });
   });
+
+  describe('formatDuration', () => {
+    it('returns 已满 when ms is 0', () => {
+      expect(StaminaCalculator.formatDuration(0)).toBe('已满');
+    });
+
+    it('returns 已满 when ms is negative', () => {
+      expect(StaminaCalculator.formatDuration(-1000)).toBe('已满');
+    });
+
+    it('formats minutes only when under 1 hour', () => {
+      // 30 min = 1800000 ms
+      expect(StaminaCalculator.formatDuration(1800000)).toBe('30分钟');
+    });
+
+    it('formats hours and minutes when over 1 hour', () => {
+      // 90 min = 5400000 ms
+      expect(StaminaCalculator.formatDuration(5400000)).toBe('1小时30分');
+    });
+
+    it('rounds up partial minutes', () => {
+      // 30.5 min = 1830000 ms → ceil = 31 min
+      expect(StaminaCalculator.formatDuration(1830000)).toBe('31分钟');
+    });
+  });
+
+  describe('formatCountdown', () => {
+    it('returns 00:00:00 when ms is 0', () => {
+      expect(StaminaCalculator.formatCountdown(0)).toBe('00:00:00');
+    });
+
+    it('returns 00:00:00 when ms is negative', () => {
+      expect(StaminaCalculator.formatCountdown(-1000)).toBe('00:00:00');
+    });
+
+    it('formats seconds only', () => {
+      // 30 sec = 30000 ms
+      expect(StaminaCalculator.formatCountdown(30000)).toBe('00:00:30');
+    });
+
+    it('formats minutes and seconds', () => {
+      // 5 min 30 sec = 330000 ms
+      expect(StaminaCalculator.formatCountdown(330000)).toBe('00:05:30');
+    });
+
+    it('formats hours minutes seconds', () => {
+      // 1 hr 5 min 30 sec = 3930000 ms
+      expect(StaminaCalculator.formatCountdown(3930000)).toBe('01:05:30');
+    });
+
+    it('rounds up partial seconds', () => {
+      // 30.5 sec = 30500 ms → ceil = 31 sec
+      expect(StaminaCalculator.formatCountdown(30500)).toBe('00:00:31');
+    });
+  });
 });
