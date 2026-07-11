@@ -16,31 +16,16 @@
 
 ## 🚀 快速开始
 
-### 方式一：双击启动（推荐）
-
-Windows 用户直接双击 `start.bat`，脚本会自动：
-1. 检测 Node.js
-2. 探测可用端口（3000-3002）
-3. 启动本地服务器
-4. 打开浏览器
-
-按 `Ctrl+C` 停止服务器。
-
-### 方式二：手动启动
-
 需要 Node.js 18+ 环境：
 
 ```bash
-# 安装依赖
-npm install
-
-# 启动开发服务器
-npm run serve
+# 启动开发服务器（零依赖，无需 npm install）
+npm start
 # 或
-npx http-server . -p 3000 -c-1
+node server.mjs
 ```
 
-浏览器访问 `http://localhost:3000`。
+浏览器访问 `http://localhost:3000`。服务器自动探测可用端口（3000→3001→3002），启动后自动打开默认浏览器。按 `Ctrl+C` 停止。
 
 ## 📖 使用说明
 
@@ -63,7 +48,7 @@ npx http-server . -p 3000 -c-1
 | Service Worker | 离线缓存 |
 | Web Notifications | 体力通知 |
 | Vitest | 单元测试 |
-| http-server | 本地开发服务器 |
+| Node.js 内置模块 | 零依赖本地开发服务器 |
 
 ## 📁 项目结构
 
@@ -71,7 +56,8 @@ npx http-server . -p 3000 -c-1
 ├── index.html              # 应用入口
 ├── manifest.json           # PWA 清单
 ├── sw.js                   # Service Worker
-├── start.bat / start.ps1   # Windows 双击启动脚本
+├── server.mjs              # 零依赖静态文件服务器
+├── start.ps1               # Windows 便捷启动脚本（可选）
 ├── css/
 │   └── style.css           # 样式
 ├── js/

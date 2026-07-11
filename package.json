@@ -7,7 +7,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "generate-icons": "node scripts/generate-icons.js",
-    "serve": "npx http-server . -p 3000 -c-1"
+    "start": "node server.mjs",
+    "serve": "node server.mjs"
   },
   "devDependencies": {
     "vitest": "^2.0.0",
