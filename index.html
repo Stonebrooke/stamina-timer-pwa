@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>游戏体力计时器</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1>⏱️ 体力计时器</h1>
+      <div class="header-actions">
+        <button id="add-timer" class="btn-primary">+ 新建计时器</button>
+        <button id="enable-notifications" class="btn-secondary">🔔 开启通知</button>
+      </div>
+    </header>
+    <main id="timer-list" class="timer-list">
+      <!-- 计时器卡片动态插入 -->
+    </main>
+  </div>
+
+  <!-- 添加/编辑计时器模态框 -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>新建计时器</h2>
+      <form id="timer-form">
+        <label>游戏名称 <input type="text" name="name" required placeholder="如：原神"></label>
+        <label>图标 <input type="text" name="icon" placeholder="🎮" maxlength="4"></label>
+        <label>体力上限 <input type="number" name="maxStamina" required min="1" value="160"></label>
+        <label>当前体力 <input type="number" name="currentStamina" required min="0" value="0"></label>
+        <label>恢复间隔（分钟） <input type="number" name="recoveryMinutes" required min="1" value="8"></label>
+        <label>满体力通知 <input type="checkbox" name="notifyAtFull" checked></label>
+        <label>每 N 点通知 <input type="number" name="notifyInterval" min="0" value="0" placeholder="0=不通知"></label>
+        <label>主题色 <input type="color" name="color" value="#4a90d9"></label>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">保存</button>
+          <button type="button" id="cancel-btn" class="btn-secondary">取消</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
